@@ -1,26 +1,45 @@
 import { useState } from 'react'
+import Hero from './components/Hero'
+import BookingForm from './components/BookingForm'
+import Pricing from './components/Pricing'
+import LiveTrack from './components/LiveTrack'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [lastBookingId, setLastBookingId] = useState('')
+  const [pendingQuote, setPendingQuote] = useState(null)
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 flex items-center justify-center">
-      <div className="bg-white p-8 rounded-lg shadow-lg">
-        <h1 className="text-3xl font-bold text-gray-800 mb-4">
-          Vibe Coding Platform
-        </h1>
-        <p className="text-gray-600 mb-6">
-          Your AI-powered development environment
-        </p>
-        <div className="text-center">
-          <button
-            onClick={() => setCount(count + 1)}
-            className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"
-          >
-            Count is {count}
-          </button>
+    <div className="min-h-screen bg-gradient-to-b from-white to-gray-50 text-gray-900">
+      <Hero />
+
+      <main className="container mx-auto px-4 -mt-16 relative z-10">
+        <div className="grid lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-2 space-y-6">
+            <BookingForm onCreated={(id, payload) => { setLastBookingId(id); setPendingQuote(payload) }} />
+            <Pricing />
+          </div>
+          <div className="lg:col-span-1 space-y-6">
+            <LiveTrack technicianId={pendingQuote?.technician_id || ''} />
+            <div className="bg-white rounded-2xl shadow-xl p-6">
+              <h3 className="text-xl font-semibold">Why choose us</h3>
+              <ul className="mt-3 space-y-2 text-gray-700 text-sm">
+                <li>• Vetted technicians across the city</li>
+                <li>• Real‑time arrival tracking</li>
+                <li>• Clear, upfront pricing</li>
+                <li>• Reviews you can trust</li>
+                <li>• Secure in‑app payments</li>
+              </ul>
+              {lastBookingId && (
+                <p className="mt-4 text-sm text-green-700">Booking created: {lastBookingId}</p>
+              )}
+            </div>
+          </div>
         </div>
-      </div>
+      </main>
+
+      <footer className="mt-16 py-10 text-center text-sm text-gray-600">
+        © {new Date().getFullYear()} SwiftFix — Quality • Speed • Transparency
+      </footer>
     </div>
   )
 }
